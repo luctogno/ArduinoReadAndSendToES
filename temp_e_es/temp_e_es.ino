@@ -2,6 +2,11 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
+#include <avr/io.h>
+#include <avr/wdt.h>
+
+#define Reset_AVR() wdt_enable(WDTO_30MS); while(1) {}
+
 // Enter a MAC address for your controller below.
 // Newer Ethernet shields have a MAC address printed on a sticker on the shield
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
@@ -81,11 +86,13 @@ void loop()
     Serial.println("disconnecting.");
     ethClient.stop();
 
-    // do nothing forevermore:
-    while (true);
+    //WAIT A WHILE for check server availability
+    delay(600000);
+    // TRY TO RESET ARDUINO
+    Reset_AVR()
   }
 
-  // FINE CICLO, ATTENDERE del tempo 15m
+  // FINE CICLO
 }
 
 float getTemperature() {
